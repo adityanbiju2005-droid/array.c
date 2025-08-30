@@ -1,0 +1,35 @@
+name: C Build and Test
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install dependencies
+      run: sudo apt-get update && sudo apt-get install -y gcc
+    
+    - name: Compile C program
+      run: gcc -o program your_file.c
+    
+    - name: Run program and capture output
+      run: ./program > output.txt
+    
+    - name: Display output
+      run: cat output.txt
+    
+    - name: Test expected output
+      run: |
+        EXPECTED="Hello, World!"
+        ACTUAL=$(cat output.txt)
+        if [ "$ACTUAL" = "$EXPECTED" ]; then
+          echo "Output matches expected result"
+        else
+          echo "Output does not match expected result"
+          echo "Expected: $EXPECTED"
+          echo "Actual: $ACTUAL"
+          exit 1
+        fi
